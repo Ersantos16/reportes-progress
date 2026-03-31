@@ -7,6 +7,7 @@
 <title>Análisis Financiero - VETERINO S.A.S.</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
@@ -24,6 +25,7 @@ body{
     color:var(--text);
 }
 
+/* HEADER */
 header{
     display:flex;
     justify-content:space-between;
@@ -37,6 +39,26 @@ header{
     gap:15px;
 }
 
+.header-left h2{
+    color:white;
+}
+
+/* VARIACIONES */
+.variaciones{
+    display:flex;
+    gap:30px;
+}
+
+.var-box{
+    text-align:center;
+}
+
+.var-box h4{
+    font-size:12px;
+    color:#94A3B8;
+}
+
+/* CONTAINER */
 .container{
     max-width:1100px;
     margin:auto;
@@ -50,7 +72,7 @@ header{
     margin-bottom:20px;
 }
 
-/* ESPACIO ENTRE KPI Y TABLA */
+/* KPI */
 .kpis{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -58,7 +80,7 @@ header{
     margin-bottom:40px;
 }
 
-/* TABLA PRO */
+/* TABLA */
 .tabla-pro{
     width:100%;
     border-collapse:collapse;
@@ -83,10 +105,12 @@ header{
     background:rgba(255,255,255,0.05);
 }
 
+/* FOOTER */
 footer{
+    background:var(--primary);
     text-align:center;
     padding:20px;
-    background:var(--primary);
+    font-size:12px;
 }
 </style>
 </head>
@@ -94,15 +118,36 @@ footer{
 <body>
 
 <header>
+
 <div class="header-left">
     <img src="Progress.png" height="40">
-    <h2 style="color:white;">Análisis Financiero - VETERINO S.A.S.</h2>
+    <h2>Análisis Financiero - VETERINO S.A.S.</h2>
 </div>
+
+<div style="display:flex;align-items:center;gap:20px;">
+    <div class="variaciones">
+        <div class="var-box">
+            <h4>Ventas</h4>
+            <p id="varVentas"></p>
+        </div>
+        <div class="var-box">
+            <h4>Compras</h4>
+            <p id="varCompras"></p>
+        </div>
+        <div class="var-box">
+            <h4>Resultado</h4>
+            <p id="varResultado"></p>
+        </div>
+    </div>
+
+    <img src="veterino.png" height="40">
+</div>
+
 </header>
 
 <div class="container">
 
-<!-- KPI (sin tocar diseño base) -->
+<!-- KPI -->
 <div class="kpis">
 <div class="card"><h4>Ventas Totales</h4><p id="ventasTotal"></p></div>
 <div class="card"><h4>Compras Totales</h4><p id="comprasTotal"></p></div>
@@ -131,10 +176,23 @@ footer{
 
 </div>
 
+<!-- GRAFICO BARRAS -->
+<div class="card">
+<h2>Ventas vs Compras</h2>
+<canvas id="chartComparativo"></canvas>
+</div>
+
+<!-- GRAFICO LINEA -->
+<div class="card">
+<h2>Variación (%)</h2>
+<canvas id="chartVariacion"></canvas>
+</div>
+
 </div>
 
 <footer>
-© 2026 PROGRESS SERVICES PROGSERV S.A.S.
+© 2026 PROGRESS SERVICES PROGSERV S.A.S. Todos los derechos reservados.<br>
+Este reporte ha sido elaborado por PROGRESS SERVICES PROGSERV S.A.S. Su reproducción total o parcial está estrictamente prohibida.
 </footer>
 
 <script>
@@ -144,12 +202,6 @@ const meses=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","
 
 const ventas=[99815,51731,110979,293804,66415,28404,381626,649979,365924,619432,303714,656114];
 const compras=[50000,30000,70000,200000,50000,20000,250000,400000,200000,300000,150000,450000];
-
-// CALCULOS
-const totalVentas=ventas.reduce((a,b)=>a+b,0);
-const totalCompras=compras.reduce((a,b)=>a+b,0);
-const resultadoTotal=totalVentas-totalCompras;
-const promedio=totalVentas/ventas.length;
 
 const resultadoMensual=ventas.map((v,i)=>v-compras[i]);
 
@@ -167,19 +219,31 @@ const varCompras=calcVar(compras);
 const varResultado=calcVar(resultadoMensual);
 
 // KPIs
-document.getElementById("ventasTotal").innerText="$"+totalVentas.toLocaleString();
-document.getElementById("comprasTotal").innerText="$"+totalCompras.toLocaleString();
-document.getElementById("resultado").innerText="$"+resultadoTotal.toLocaleString();
-document.getElementById("promedio").innerText="$"+Math.round(promedio).toLocaleString();
+document.getElementById("ventasTotal").innerText="$"+ventas.reduce((a,b)=>a+b,0).toLocaleString();
+document.getElementById("comprasTotal").innerText="$"+compras.reduce((a,b)=>a+b,0).toLocaleString();
+document.getElementById("resultado").innerText="$"+resultadoMensual.reduce((a,b)=>a+b,0).toLocaleString();
+document.getElementById("promedio").innerText="$"+Math.round(ventas.reduce((a,b)=>a+b,0)/12).toLocaleString();
 
-// COLOR
-function color(v){return v>=0 ? "#5BFF7A" : "#ff6b6b";}
+// VAR HEADER
+function color(v){return v>=0?"#5BFF7A":"#ff6b6b";}
+
+let vV=varVentas[11];
+let vC=varCompras[11];
+let vR=varResultado[11];
+
+document.getElementById("varVentas").innerText=vV.toFixed(0)+"%";
+document.getElementById("varVentas").style.color=color(vV);
+
+document.getElementById("varCompras").innerText=vC.toFixed(0)+"%";
+document.getElementById("varCompras").style.color=color(vC);
+
+document.getElementById("varResultado").innerText=vR.toFixed(0)+"%";
+document.getElementById("varResultado").style.color=color(vR);
 
 // TABLA
 const tabla=document.getElementById("tabla");
 
 for(let i=0;i<meses.length;i++){
-
     let res=resultadoMensual[i];
 
     tabla.innerHTML+=`
@@ -187,24 +251,39 @@ for(let i=0;i<meses.length;i++){
         <td>${meses[i]}</td>
 
         <td>$${ventas[i].toLocaleString()}</td>
-        <td style="color:${color(varVentas[i])}">
-            ${i==0?"-":varVentas[i].toFixed(0)+"%"}
-        </td>
+        <td style="color:${color(varVentas[i])}">${i==0?"-":varVentas[i].toFixed(0)+"%"}</td>
 
         <td>$${compras[i].toLocaleString()}</td>
-        <td style="color:${color(varCompras[i])}">
-            ${i==0?"-":varCompras[i].toFixed(0)+"%"}
-        </td>
+        <td style="color:${color(varCompras[i])}">${i==0?"-":varCompras[i].toFixed(0)+"%"}</td>
 
-        <td style="color:${res>=0?'#5BFF7A':'#ff6b6b'}">
-            $${res.toLocaleString()}
-        </td>
-
-        <td style="color:${color(varResultado[i])}">
-            ${i==0?"-":varResultado[i].toFixed(0)+"%"}
-        </td>
+        <td style="color:${res>=0?'#5BFF7A':'#ff6b6b'}">$${res.toLocaleString()}</td>
+        <td style="color:${color(varResultado[i])}">${i==0?"-":varResultado[i].toFixed(0)+"%"}</td>
     </tr>`;
 }
+
+// GRAFICOS
+new Chart(document.getElementById('chartComparativo'),{
+    type:'bar',
+    data:{
+        labels:meses,
+        datasets:[
+            {label:'Ventas',data:ventas,backgroundColor:'#2E3F6E'},
+            {label:'Compras',data:compras,backgroundColor:'#5BFF7A'}
+        ]
+    }
+});
+
+new Chart(document.getElementById('chartVariacion'),{
+    type:'line',
+    data:{
+        labels:meses,
+        datasets:[
+            {label:'Ventas',data:varVentas,borderColor:'#2E3F6E'},
+            {label:'Compras',data:varCompras,borderColor:'#5BFF7A'},
+            {label:'Resultado',data:varResultado,borderColor:'#ffffff'}
+        ]
+    }
+});
 
 </script>
 
