@@ -13,24 +13,18 @@
 :root {
     --primary:#2E3F6E;
     --accent:#5BFF7A;
-    --bg:#0F172A;
-    --card:#1E293B;
-    --text:#E2E8F0;
 }
 
 body{
     margin:0;
     font-family:'Inter',sans-serif;
     background:#F1F5F9;
-    color:#1E293B;
 }
-    
-/* HERO GRID */
+
+/* HERO */
 .hero{
-    background: linear-gradient(135deg, #0F172A 0%, #1E293B 60%, #0B1F3A 100%);
-    padding:60px 40px 120px;
-    position:relative;
-    overflow:hidden;
+    background: linear-gradient(135deg, #0F172A, #1E293B);
+    padding:50px 40px 120px;
 }
 
 /* HEADER */
@@ -54,84 +48,76 @@ header{
 .variaciones{
     display:flex;
     gap:30px;
-}
-
-.var-box{
-    text-align:center;
-}
-
-.var-box h4{
-    font-size:12px;
-    color:#94A3B8;
+    color:#5BFF7A;
 }
 
 /* CONTAINER */
 .container{
     max-width:1100px;
     margin:auto;
-    padding:40px 20px;
     margin-top:-80px;
+    padding:20px;
 }
 
-/* KPI STICKY */
-.kpis{
+/* CARDS */
+.card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* GRID */
+.grid-cards{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:20px;
-    margin-bottom:40px;
-
-    position:sticky;
-    top:0;
-    z-index:1000;
-
-    background:#0F172A;
-    padding:15px;
-    border-radius:14px;
+    margin-bottom:20px;
 }
 
-.card{
-    background:#1E293B;
-    padding:20px;
-    border-radius:14px;
-    color:#E2E8F0;
-    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+.grid-charts{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
 }
 
-.card:hover{
-    transform:translateY(-4px);
+/* KPI TOP */
+.kpi-top{
+    border-top:4px solid var(--primary);
 }
 
-/* TABLA */
-.tabla-pro{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:15px;
+.card h5{
+    font-size:12px;
+    color:#64748B;
 }
 
-.tabla-pro th{
-    text-align:left;
-    padding:10px;
-    color:#94A3B8;
+.card h2{
+    margin:10px 0;
 }
 
-.tabla-pro td{
-    padding:10px;
+.tag{
+    background:#E2E8F0;
+    padding:5px 10px;
+    border-radius:10px;
+    font-size:12px;
 }
 
-.tabla-pro td:nth-child(n+2){
-    text-align:right;
+.tag.green{
+    background:#DCFCE7;
+    color:#166534;
 }
 
-.tabla-pro tr:hover{
-    background:rgba(255,255,255,0.05);
+.tag.red{
+    background:#FEE2E2;
+    color:#991B1B;
 }
 
 /* FOOTER */
 footer{
-    background:var(--primary);
+    background:#0F172A;
+    color:white;
     text-align:center;
     padding:20px;
-    font-size:12px;
 }
 </style>
 </head>
@@ -150,20 +136,10 @@ footer{
 
 <div style="display:flex;align-items:center;gap:20px;">
     <div class="variaciones">
-        <div class="var-box">
-            <h4>Ventas</h4>
-            <p id="varVentas"></p>
-        </div>
-        <div class="var-box">
-            <h4>Compras</h4>
-            <p id="varCompras"></p>
-        </div>
-        <div class="var-box">
-            <h4>Resultado</h4>
-            <p id="varResultado"></p>
-        </div>
+        <div>Ventas 116%</div>
+        <div>Compras 200%</div>
+        <div>Resultado 34%</div>
     </div>
-
     <img src="veterino.png" height="40">
 </div>
 
@@ -174,44 +150,81 @@ footer{
 <!-- CONTENT -->
 <div class="container">
 
-<!-- KPI -->
-<div class="kpis">
-<div class="card"><h4>Ventas Totales</h4><p id="ventasTotal"></p></div>
-<div class="card"><h4>Compras Totales</h4><p id="comprasTotal"></p></div>
-<div class="card"><h4>Resultado</h4><p id="resultado"></p></div>
-<div class="card"><h4>Promedio Ventas</h4><p id="promedio"></p></div>
+<!-- KPIs -->
+<div class="grid-cards">
+
+<div class="card kpi-top">
+<h5>2023 · AÑO BASE</h5>
+<h2>$1.13M</h2>
+<p>$1,129,024</p>
+<span class="tag">Línea base</span>
 </div>
 
-<!-- TABLA -->
-<div class="card">
-<h2>Detalle Mensual</h2>
+<div class="card kpi-top">
+<h5>2024 · PICO MÁXIMO</h5>
+<h2>$1.34M</h2>
+<p>$1,338,026</p>
+<span class="tag green">▲ +18.5%</span>
+</div>
 
-<table class="tabla-pro">
-<thead>
-<tr>
-<th>Mes</th>
-<th>Ventas</th>
-<th>Var %</th>
-<th>Compras</th>
-<th>Var %</th>
-<th>Resultado</th>
-<th>Var %</th>
-</tr>
-</thead>
-<tbody id="tabla"></tbody>
-</table>
+<div class="card kpi-top">
+<h5>2025 · CONSOLIDACIÓN</h5>
+<h2>$1.31M</h2>
+<p>$1,307,690</p>
+<span class="tag red">▼ -2.3%</span>
+</div>
+
+<div class="card kpi-top">
+<h5>TOTAL 3 AÑOS</h5>
+<h2>$3.77M</h2>
+<p>$3,774,740 acumulado</p>
+<span class="tag green">▲ +15.8%</span>
+</div>
+
+</div>
+
+<!-- SEGUNDA FILA -->
+<div class="grid-cards">
+
+<div class="card">
+<h5>RUTA PRINCIPAL 2023</h5>
+<h3>$682,170</h3>
+<p>60.4% del total</p>
+</div>
+
+<div class="card">
+<h5>RUTA PRINCIPAL 2024</h5>
+<h3>$1,043,790</h3>
+<p>78.0% del total</p>
+</div>
+
+<div class="card">
+<h5>RUTA PRINCIPAL 2025</h5>
+<h3>$851,712</h3>
+<p>65.1% del total</p>
+</div>
+
+<div class="card">
+<h5>RUTA POSORJA ACUM.</h5>
+<h3>$815,121</h3>
+<p>21.6% del total</p>
+</div>
 
 </div>
 
 <!-- GRAFICOS -->
+<div class="grid-charts">
+
 <div class="card">
-<h2>Ventas vs Compras</h2>
-<canvas id="chartComparativo"></canvas>
+<h3>Ventas Totales por Año</h3>
+<canvas id="chartAnual"></canvas>
 </div>
 
 <div class="card">
-<h2>Variación (%)</h2>
-<canvas id="chartVariacion"></canvas>
+<h3>Composición 3 Años</h3>
+<canvas id="chartDonut"></canvas>
+</div>
+
 </div>
 
 </div>
@@ -219,100 +232,38 @@ footer{
 <!-- FOOTER -->
 <footer>
 
-<div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-bottom:10px;">
+<div style="display:flex;justify-content:center;gap:20px;margin-bottom:10px;">
     <img src="Progress.png" height="30">
     <img src="veterino.png" height="30">
 </div>
 
-© 2026 PROGRESS SERVICES PROGSERV S.A.S. Todos los derechos reservados.<br>
-Este reporte ha sido elaborado por PROGRESS SERVICES PROGSERV S.A.S.
-Su reproducción total o parcial está estrictamente prohibida.
+© 2026 PROGRESS SERVICES PROGSERV S.A.S. Todos los derechos reservados.
 
 </footer>
 
 <script>
 
-// DATA
-const meses=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-
-const ventas=[99815,51731,110979,293804,66415,28404,381626,649979,365924,619432,303714,656114];
-const compras=[50000,30000,70000,200000,50000,20000,250000,400000,200000,300000,150000,450000];
-
-const resultadoMensual=ventas.map((v,i)=>v-compras[i]);
-
-// VARIACIONES
-function calcVar(arr){
-    let v=[0];
-    for(let i=1;i<arr.length;i++){
-        v.push(((arr[i]-arr[i-1])/arr[i-1])*100);
-    }
-    return v;
-}
-
-const varVentas=calcVar(ventas);
-const varCompras=calcVar(compras);
-const varResultado=calcVar(resultadoMensual);
-
-// KPI
-document.getElementById("ventasTotal").innerText="$"+ventas.reduce((a,b)=>a+b,0).toLocaleString();
-document.getElementById("comprasTotal").innerText="$"+compras.reduce((a,b)=>a+b,0).toLocaleString();
-document.getElementById("resultado").innerText="$"+resultadoMensual.reduce((a,b)=>a+b,0).toLocaleString();
-document.getElementById("promedio").innerText="$"+Math.round(ventas.reduce((a,b)=>a+b,0)/12).toLocaleString();
-
-// HEADER VAR
-function color(v){return v>=0?"#5BFF7A":"#ff6b6b";}
-
-document.getElementById("varVentas").innerText=varVentas[11].toFixed(0)+"%";
-document.getElementById("varVentas").style.color=color(varVentas[11]);
-
-document.getElementById("varCompras").innerText=varCompras[11].toFixed(0)+"%";
-document.getElementById("varCompras").style.color=color(varCompras[11]);
-
-document.getElementById("varResultado").innerText=varResultado[11].toFixed(0)+"%";
-document.getElementById("varResultado").style.color=color(varResultado[11]);
-
-// TABLA
-const tabla=document.getElementById("tabla");
-
-for(let i=0;i<meses.length;i++){
-    let res=resultadoMensual[i];
-
-    tabla.innerHTML+=`
-    <tr>
-        <td>${meses[i]}</td>
-
-        <td>$${ventas[i].toLocaleString()}</td>
-        <td style="color:${color(varVentas[i])}">${i==0?"-":varVentas[i].toFixed(0)+"%"}</td>
-
-        <td>$${compras[i].toLocaleString()}</td>
-        <td style="color:${color(varCompras[i])}">${i==0?"-":varCompras[i].toFixed(0)+"%"}</td>
-
-        <td style="color:${res>=0?'#5BFF7A':'#ff6b6b'}">$${res.toLocaleString()}</td>
-        <td style="color:${color(varResultado[i])}">${i==0?"-":varResultado[i].toFixed(0)+"%"}</td>
-    </tr>`;
-}
-
-// GRAFICOS
-new Chart(document.getElementById('chartComparativo'),{
+// BARRAS
+new Chart(document.getElementById('chartAnual'),{
     type:'bar',
     data:{
-        labels:meses,
-        datasets:[
-            {label:'Ventas',data:ventas,backgroundColor:'#2E3F6E'},
-            {label:'Compras',data:compras,backgroundColor:'#5BFF7A'}
-        ]
+        labels:['2023','2024','2025'],
+        datasets:[{
+            data:[1129024,1338026,1307690],
+            backgroundColor:['#2E3F6E','#5BFF7A','#FF6B35']
+        }]
     }
 });
 
-new Chart(document.getElementById('chartVariacion'),{
-    type:'line',
+// DONA
+new Chart(document.getElementById('chartDonut'),{
+    type:'doughnut',
     data:{
-        labels:meses,
-        datasets:[
-            {label:'Ventas',data:varVentas,borderColor:'#2E3F6E'},
-            {label:'Compras',data:varCompras,borderColor:'#5BFF7A'},
-            {label:'Resultado',data:varResultado,borderColor:'#FFFFFF'}
-        ]
+        labels:['Machachi','Posorja','Aloag','Otros'],
+        datasets:[{
+            data:[70,20,5,5],
+            backgroundColor:['#2E3F6E','#5BFF7A','#FF6B35','#94A3B8']
+        }]
     }
 });
 
