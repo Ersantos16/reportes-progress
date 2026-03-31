@@ -3,251 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Análisis Financiero - VETERINO S.A.S.</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-:root{
---primary:#2E3F6E;
---accent:#5BFF7A;
---dark:#0F172A;
---light:#F1F5F9;
-}
-
-body{
-margin:0;
-font-family:'Inter',sans-serif;
-background:var(--light);
-}
-
-/* HEADER PRO */
-header{
-background:linear-gradient(135deg,#111827,#1E293B);
-color:white;
-padding:15px 30px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-position:sticky;
-top:0;
-z-index:1000;
-}
-
-.header-left{
-display:flex;
-align-items:center;
-gap:15px;
-}
-
-.variaciones{
-display:flex;
-gap:25px;
-font-weight:600;
-}
-
-/* HERO */
-.hero{
-background:linear-gradient(135deg,#0F172A,#1E293B);
-color:white;
-text-align:center;
-padding:40px;
-}
-
-/* TABS */
-.tabs{
-display:flex;
-background:white;
-border-bottom:2px solid #E5E7EB;
-}
-
-.tab{
-padding:15px 25px;
-cursor:pointer;
-font-weight:600;
-}
-
-.tab.active{
-color:var(--primary);
-border-bottom:3px solid var(--primary);
-}
-
-/* CONTENT */
-.container{
-max-width:1200px;
-margin:auto;
-padding:30px;
-}
-
-/* KPI */
-.grid-cards{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:20px;
-margin-bottom:30px;
-}
-
-.card{
-background:white;
-border-radius:12px;
-padding:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
-}
-
-.card h5{
-font-size:12px;
-color:#64748B;
-}
-
-.card h3{
-margin:10px 0;
-}
-
-/* CHARTS */
-.grid-charts{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:20px;
-}
-
-/* FOOTER */
-footer{
-background:#0F172A;
-color:white;
-text-align:center;
-padding:20px;
-margin-top:40px;
-}
+body{margin:0;font-family:'Inter',sans-serif;background:#F1F5F9;}
+header{background:#0F172A;color:white;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;}
+.tabs{display:flex;background:white;border-bottom:2px solid #E5E7EB;}
+.tab{padding:15px 25px;cursor:pointer;font-weight:600;}
+.tab.active{color:#2E3F6E;border-bottom:3px solid #2E3F6E;}
+.container{padding:30px;max-width:1200px;margin:auto;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.card{background:white;padding:20px;border-radius:12px;box-shadow:0 10px 20px rgba(0,0,0,0.08);}
+footer{background:#0F172A;color:white;text-align:center;padding:20px;}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="header-left">
-<img src="Progress.png" height="35">
-<h3>Análisis Financiero - VETERINO S.A.S.</h3>
-</div>
-
-<div class="variaciones">
-<div id="varVentas"></div>
-<div id="varCompras"></div>
-<div id="varResultado"></div>
-</div>
-
-<img src="veterino.png" height="35">
+<div>PROGRESS | Análisis Financiero - VETERINO</div>
+<div id="variaciones"></div>
 </header>
 
-<div class="hero">
-<h2>Reporte Financiero Dinámico</h2>
-<p>Visualización ejecutiva de desempeño</p>
-</div>
-
-<!-- TABS -->
 <div class="tabs">
-<div class="tab active" onclick="showTab('resumen')">Resumen</div>
-<div class="tab" onclick="showTab('detalle')">Detalle</div>
+<div class="tab active" onclick="tab('resumen')">Resumen</div>
+<div class="tab" onclick="tab('detalle')">Detalle</div>
 </div>
 
 <div class="container">
 
-<!-- TAB 1 -->
-<div id="resumen" class="tab-content">
+<!-- RESUMEN -->
+<div id="resumen">
 
-<div class="grid-cards" id="cardsContainer"></div>
+<div class="grid" id="kpis"></div>
 
-<div class="grid-charts">
 <div class="card">
-<h3>Ventas vs Compras</h3>
-<canvas id="chartComparativo"></canvas>
+<canvas id="chart1"></canvas>
 </div>
 
 <div class="card">
-<h3>Variación (%)</h3>
-<canvas id="chartVariacion"></canvas>
-</div>
+<canvas id="chart2"></canvas>
 </div>
 
 </div>
 
-<!-- TAB 2 -->
-<div id="detalle" class="tab-content" style="display:none;">
-
+<!-- DETALLE -->
+<div id="detalle" style="display:none;">
 <div class="card">
-<h3>Detalle Mensual</h3>
-<canvas id="chartDetalle"></canvas>
+<canvas id="chart3"></canvas>
 </div>
-
 </div>
 
 </div>
 
 <footer>
-
-<div style="display:flex;justify-content:center;gap:20px;margin-bottom:10px;">
-<img src="Progress.png" height="30">
-<img src="veterino.png" height="30">
-</div>
-
-© 2026 PROGRESS SERVICES PROGSERV S.A.S. Todos los derechos reservados.
-
+© 2026 PROGRESS SERVICES PROGSERV S.A.S.
 </footer>
 
 <script>
 
-// ================= DATOS BASE (NO TOCADOS) =================
+// ===== DATOS (TU BASE) =====
 const meses=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
 const ventas=[99815,51731,110979,293804,66415,28404,381626,649979,365924,619432,303714,656114];
 const compras=[50000,30000,70000,200000,50000,20000,250000,400000,200000,300000,150000,450000];
 
-const resultadoMensual=ventas.map((v,i)=>v-compras[i]);
+const resultado=ventas.map((v,i)=>v-compras[i]);
 
-// ================= VARIACIONES =================
-function calcVar(arr){
-let v=[0];
+// ===== VARIACIONES =====
+function calc(arr){
+let r=[0];
 for(let i=1;i<arr.length;i++){
-v.push(((arr[i]-arr[i-1])/arr[i-1])*100);
+r.push(((arr[i]-arr[i-1])/arr[i-1])*100);
 }
-return v;
+return r;
 }
 
-const varVentasArr=calcVar(ventas);
-const varComprasArr=calcVar(compras);
-const varResultadoArr=calcVar(resultadoMensual);
+const vV=calc(ventas);
+const vC=calc(compras);
+const vR=calc(resultado);
 
-// ================= HEADER =================
-function color(v){return v>=0?"#5BFF7A":"#ff6b6b";}
+// ===== HEADER =====
+document.getElementById("variaciones").innerHTML=
+`Ventas ${vV[11].toFixed(0)}% | Compras ${vC[11].toFixed(0)}% | Resultado ${vR[11].toFixed(0)}%`;
 
-let vV=varVentasArr[11];
-let vC=varComprasArr[11];
-let vR=varResultadoArr[11];
+// ===== KPIs =====
+const totalV=ventas.reduce((a,b)=>a+b,0);
+const totalC=compras.reduce((a,b)=>a+b,0);
+const totalR=resultado.reduce((a,b)=>a+b,0);
 
-document.getElementById("varVentas").innerText="Ventas "+vV.toFixed(0)+"%";
-document.getElementById("varVentas").style.color=color(vV);
-
-document.getElementById("varCompras").innerText="Compras "+vC.toFixed(0)+"%";
-document.getElementById("varCompras").style.color=color(vC);
-
-document.getElementById("varResultado").innerText="Resultado "+vR.toFixed(0)+"%";
-document.getElementById("varResultado").style.color=color(vR);
-
-// ================= KPIs =================
-const totalVentas=ventas.reduce((a,b)=>a+b,0);
-const totalCompras=compras.reduce((a,b)=>a+b,0);
-const totalResultado=resultadoMensual.reduce((a,b)=>a+b,0);
-
-document.getElementById("cardsContainer").innerHTML=`
-<div class="card"><h5>VENTAS</h5><h3>$${totalVentas.toLocaleString()}</h3></div>
-<div class="card"><h5>COMPRAS</h5><h3>$${totalCompras.toLocaleString()}</h3></div>
-<div class="card"><h5>RESULTADO</h5><h3>$${totalResultado.toLocaleString()}</h3></div>
-<div class="card"><h5>PROMEDIO</h5><h3>$${Math.round(totalVentas/12).toLocaleString()}</h3></div>
+document.getElementById("kpis").innerHTML=`
+<div class="card"><h4>Ventas</h4><h2>$${totalV.toLocaleString()}</h2></div>
+<div class="card"><h4>Compras</h4><h2>$${totalC.toLocaleString()}</h2></div>
+<div class="card"><h4>Resultado</h4><h2>$${totalR.toLocaleString()}</h2></div>
+<div class="card"><h4>Promedio</h4><h2>$${Math.round(totalV/12).toLocaleString()}</h2></div>
 `;
 
-// ================= CHARTS =================
-new Chart(chartComparativo,{
+// ===== CHARTS =====
+new Chart(chart1,{
 type:'bar',
 data:{
 labels:meses,
@@ -258,36 +114,33 @@ datasets:[
 }
 });
 
-new Chart(chartVariacion,{
+new Chart(chart2,{
 type:'line',
 data:{
 labels:meses,
 datasets:[
-{label:'Ventas',data:varVentasArr,borderColor:'#2E3F6E'},
-{label:'Compras',data:varComprasArr,borderColor:'#5BFF7A'},
-{label:'Resultado',data:varResultadoArr,borderColor:'#FF6B35'}
+{label:'Ventas',data:vV,borderColor:'#2E3F6E'},
+{label:'Compras',data:vC,borderColor:'#5BFF7A'},
+{label:'Resultado',data:vR,borderColor:'#FF6B35'}
 ]
 }
 });
 
-new Chart(chartDetalle,{
+new Chart(chart3,{
 type:'line',
 data:{
 labels:meses,
 datasets:[
-{label:'Ventas',data:ventas,borderColor:'#2E3F6E'},
-{label:'Resultado',data:resultadoMensual,borderColor:'#5BFF7A'}
+{label:'Resultado',data:resultado,borderColor:'#5BFF7A'}
 ]
 }
 });
 
-// ================= TABS =================
-function showTab(tab){
-document.querySelectorAll(".tab-content").forEach(t=>t.style.display="none");
-document.getElementById(tab).style.display="block";
-
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-event.target.classList.add("active");
+// ===== TABS =====
+function tab(t){
+document.getElementById("resumen").style.display="none";
+document.getElementById("detalle").style.display="none";
+document.getElementById(t).style.display="block";
 }
 
 </script>
