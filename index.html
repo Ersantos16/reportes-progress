@@ -1,161 +1,189 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte Financiero - VETERINO S.A.S.</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Financiero - VETERINO S.A.S.</title>
 
-    <!-- Tipografía moderna -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-        :root {
-            --primary: #2E3F6E;   /* Azul PROGRESS */
-            --accent: #5BFF7A;    /* Verde flecha */
-            --background: #F5F7FB;
-            --text: #1E1E1E;
-            --white: #FFFFFF;
-        }
+<style>
+:root {
+    --primary: #2E3F6E;
+    --accent: #5BFF7A;
+    --background: #F5F7FB;
+    --text: #1E1E1E;
+    --white: #FFFFFF;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--background);
+    margin:0;
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--background);
-            color: var(--text);
-        }
+/* HEADER */
+header {
+    background: var(--white);
+    padding: 20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 
-        header {
-            background: var(--white);
-            padding: 20px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
-        }
+/* CARDS */
+.container {
+    max-width:1100px;
+    margin:auto;
+    padding:40px 20px;
+}
 
-        header img {
-            height: 50px;
-        }
+.card {
+    background:white;
+    padding:30px;
+    border-radius:14px;
+    margin-bottom:20px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.06);
+}
 
-        header h1 {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--primary);
-        }
+h2 { color:var(--primary); }
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 40px 20px;
-        }
+.highlight { color:var(--accent); font-weight:600; }
 
-        .card {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0px 6px 20px rgba(0,0,0,0.06);
-            transition: 0.3s;
-        }
+/* KPI GRID */
+.kpis{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
 
-        .card:hover {
-            transform: translateY(-3px);
-        }
+.kpi{
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
 
-        h2 {
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
+.kpi h4{
+    margin:0;
+    font-size:14px;
+}
 
-        .highlight {
-            color: var(--accent);
-            font-weight: 600;
-        }
+.kpi p{
+    font-size:22px;
+    font-weight:bold;
+    color:var(--primary);
+}
 
-        ul {
-            padding-left: 20px;
-        }
-
-        footer {
-            background: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 20px;
-            font-size: 13px;
-            margin-top: 40px;
-        }
-
-        .divider {
-            width: 50px;
-            height: 4px;
-            background: var(--accent);
-            margin-bottom: 15px;
-            border-radius: 10px;
-        }
-
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-        }
-    </style>
+/* FOOTER */
+footer {
+    background: var(--primary);
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+</style>
 </head>
 
 <body>
 
-    <header>
-            <div style="display: flex; align-items: center; gap: 15px;">
-            <img src="Progress.png" alt="PROGRESS Logo" style="height: 45px;">
-            <h1>Reporte Financiero</h1>
-        </div>
-
-        <img src="veterino.png" alt="Cliente Logo" style="height: 45px;">
-    </header>
-
-    <div class="container">
-
-        <div class="card">
-            <div class="divider"></div>
-            <h2>Resumen Ejecutivo</h2>
-            <p>
-                Este reporte presenta el análisis financiero del periodo, destacando el desempeño general,
-                evolución operativa y principales conclusiones estratégicas.
-            </p>
-        </div>
-
-        <div class="card">
-            <div class="divider"></div>
-            <h2>Indicadores Clave</h2>
-            <ul>
-                <li>Ingresos: <span class="highlight">$XXX</span></li>
-                <li>Costos: <span class="highlight">$XXX</span></li>
-                <li>Utilidad: <span class="highlight">$XXX</span></li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <div class="divider"></div>
-            <h2>Análisis Financiero</h2>
-            <p>
-                Se evidencia una mejora sostenida en la eficiencia operativa, impulsada por la optimización
-                de costos y el incremento en ingresos. Se recomienda consolidar esta tendencia mediante
-                controles financieros más robustos y estrategias de crecimiento escalables.
-            </p>
-        </div>
-
+<header>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <img src="Progress.png" style="height:45px;">
+        <h1>Reporte Financiero</h1>
     </div>
+    <img src="veterino.png" style="height:45px;">
+</header>
 
-    <footer>
-        © 2026 PROGRESS SERVICES PROGSERV S.A.S. Todos los derechos reservados.<br>
-        Este reporte ha sido elaborado por PROGRESS SERVICES PROGSERV S.A.S.. Su reproducción total o parcial está estrictamente prohibida sin autorización.
-    </footer>
+<div class="container">
+
+<!-- RESUMEN -->
+<div class="card">
+    <h2>Resumen Ejecutivo</h2>
+    <p>
+        Análisis de ventas con alta volatilidad mensual. Se identifican picos significativos en el segundo semestre,
+        evidenciando estacionalidad y oportunidades de optimización en la estabilidad operativa.
+    </p>
+</div>
+
+<!-- KPI -->
+<div class="kpis">
+    <div class="kpi">
+        <h4>Total Ventas</h4>
+        <p>$3,774,740</p>
+    </div>
+    <div class="kpi">
+        <h4>Mes Máximo</h4>
+        <p>Dic</p>
+    </div>
+    <div class="kpi">
+        <h4>Variación Máx</h4>
+        <p class="highlight">+1243%</p>
+    </div>
+</div>
+
+<!-- GRÁFICO VENTAS -->
+<div class="card">
+    <h2>Ventas Mensuales</h2>
+    <canvas id="ventasChart"></canvas>
+</div>
+
+<!-- VARIACIÓN -->
+<div class="card">
+    <h2>Variación Mensual (%)</h2>
+    <canvas id="varChart"></canvas>
+</div>
+
+<!-- ANÁLISIS -->
+<div class="card">
+    <h2>Análisis Financiero</h2>
+    <p>
+        Se observa una estructura de ingresos altamente variable, con caídas abruptas seguidas de crecimientos exponenciales.
+        Esto sugiere dependencia de contratos puntuales o ciclos operativos irregulares. Se recomienda estabilizar ingresos
+        mediante planificación comercial y diversificación de clientes/productos.
+    </p>
+</div>
+
+</div>
+
+<footer>
+© 2026 PROGRESS SERVICES PROGSERV S.A.S. Todos los derechos reservados.
+</footer>
+
+<script>
+
+// DATA REAL
+const meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const ventas = [99815,51731,110979,293804,66415,28404,381626,649979,365924,619432,303714,656114];
+const variacion = [0,-48,114,164,-77,-57,1243,70,-43,69,-50,116];
+
+// CHART VENTAS
+new Chart(document.getElementById('ventasChart'),{
+    type:'bar',
+    data:{
+        labels:meses,
+        datasets:[{
+            label:'Ventas',
+            data:ventas
+        }]
+    }
+});
+
+// CHART VARIACION
+new Chart(document.getElementById('varChart'),{
+    type:'line',
+    data:{
+        labels:meses,
+        datasets:[{
+            label:'Variación %',
+            data:variacion
+        }]
+    }
+});
+
+</script>
 
 </body>
 </html>
