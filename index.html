@@ -59,7 +59,7 @@ header{
     padding:20px;
 }
 
-/* CARDS */
+/* CARDS BASE */
 .card{
     background:white;
     border-radius:12px;
@@ -67,7 +67,7 @@ header{
     box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* GRID */
+/* GRID KPIs */
 .grid-cards{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -75,41 +75,41 @@ header{
     margin-bottom:20px;
 }
 
-.grid-charts{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:20px;
-}
-
-/* KPI TOP */
-.kpi-top{
-    border-top:4px solid var(--primary);
-}
-
-.card h5{
+/* CARDS RESUMEN */
+.card-resumen h5{
     font-size:12px;
     color:#64748B;
+    margin:0;
 }
 
-.card h2{
+.card-resumen h3{
     margin:10px 0;
+    color:#0F172A;
 }
 
-.tag{
-    background:#E2E8F0;
+.badge{
+    display:inline-block;
+    margin-top:10px;
     padding:5px 10px;
     border-radius:10px;
     font-size:12px;
 }
 
-.tag.green{
+.badge.green{
     background:#DCFCE7;
     color:#166534;
 }
 
-.tag.red{
+.badge.red{
     background:#FEE2E2;
     color:#991B1B;
+}
+
+/* GRIDS */
+.grid-charts{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
 }
 
 /* FOOTER */
@@ -136,9 +136,9 @@ footer{
 
 <div style="display:flex;align-items:center;gap:20px;">
     <div class="variaciones">
-        <div>Ventas 116%</div>
-        <div>Compras 200%</div>
-        <div>Resultado 34%</div>
+        <div id="varVentas"></div>
+        <div id="varCompras"></div>
+        <div id="varResultado"></div>
     </div>
     <img src="veterino.png" height="40">
 </div>
@@ -147,82 +147,23 @@ footer{
 
 </div>
 
-<!-- CONTENT -->
+<!-- CONTENIDO -->
 <div class="container">
 
-<!-- KPIs -->
-<div class="grid-cards">
+<!-- TARJETAS DINÁMICAS -->
+<div class="grid-cards" id="cardsContainer"></div>
 
-<div class="card kpi-top">
-<h5>2023 · AÑO BASE</h5>
-<h2>$1.13M</h2>
-<p>$1,129,024</p>
-<span class="tag">Línea base</span>
-</div>
-
-<div class="card kpi-top">
-<h5>2024 · PICO MÁXIMO</h5>
-<h2>$1.34M</h2>
-<p>$1,338,026</p>
-<span class="tag green">▲ +18.5%</span>
-</div>
-
-<div class="card kpi-top">
-<h5>2025 · CONSOLIDACIÓN</h5>
-<h2>$1.31M</h2>
-<p>$1,307,690</p>
-<span class="tag red">▼ -2.3%</span>
-</div>
-
-<div class="card kpi-top">
-<h5>TOTAL 3 AÑOS</h5>
-<h2>$3.77M</h2>
-<p>$3,774,740 acumulado</p>
-<span class="tag green">▲ +15.8%</span>
-</div>
-
-</div>
-
-<!-- SEGUNDA FILA -->
-<div class="grid-cards">
-
-<div class="card">
-<h5>RUTA PRINCIPAL 2023</h5>
-<h3>$682,170</h3>
-<p>60.4% del total</p>
-</div>
-
-<div class="card">
-<h5>RUTA PRINCIPAL 2024</h5>
-<h3>$1,043,790</h3>
-<p>78.0% del total</p>
-</div>
-
-<div class="card">
-<h5>RUTA PRINCIPAL 2025</h5>
-<h3>$851,712</h3>
-<p>65.1% del total</p>
-</div>
-
-<div class="card">
-<h5>RUTA POSORJA ACUM.</h5>
-<h3>$815,121</h3>
-<p>21.6% del total</p>
-</div>
-
-</div>
-
-<!-- GRAFICOS -->
+<!-- GRÁFICOS -->
 <div class="grid-charts">
 
 <div class="card">
-<h3>Ventas Totales por Año</h3>
-<canvas id="chartAnual"></canvas>
+<h3>Ventas vs Compras</h3>
+<canvas id="chartComparativo"></canvas>
 </div>
 
 <div class="card">
-<h3>Composición 3 Años</h3>
-<canvas id="chartDonut"></canvas>
+<h3>Variación (%)</h3>
+<canvas id="chartVariacion"></canvas>
 </div>
 
 </div>
@@ -243,27 +184,94 @@ footer{
 
 <script>
 
-// BARRAS
-new Chart(document.getElementById('chartAnual'),{
+// ================= DATOS ORIGINALES =================
+const meses=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+const ventas=[99815,51731,110979,293804,66415,28404,381626,649979,365924,619432,303714,656114];
+const compras=[50000,30000,70000,200000,50000,20000,250000,400000,200000,300000,150000,450000];
+
+const resultadoMensual=ventas.map((v,i)=>v-compras[i]);
+
+// ================= VARIACIONES =================
+function calcVar(arr){
+    let v=[0];
+    for(let i=1;i<arr.length;i++){
+        v.push(((arr[i]-arr[i-1])/arr[i-1])*100);
+    }
+    return v;
+}
+
+const varVentasArr=calcVar(ventas);
+const varComprasArr=calcVar(compras);
+const varResultadoArr=calcVar(resultadoMensual);
+
+// ================= HEADER =================
+function color(v){return v>=0?"#5BFF7A":"#ff6b6b";}
+
+let vV=varVentasArr[11];
+let vC=varComprasArr[11];
+let vR=varResultadoArr[11];
+
+document.getElementById("varVentas").innerText="Ventas "+vV.toFixed(0)+"%";
+document.getElementById("varVentas").style.color=color(vV);
+
+document.getElementById("varCompras").innerText="Compras "+vC.toFixed(0)+"%";
+document.getElementById("varCompras").style.color=color(vC);
+
+document.getElementById("varResultado").innerText="Resultado "+vR.toFixed(0)+"%";
+document.getElementById("varResultado").style.color=color(vR);
+
+// ================= TARJETAS (MISMA DATA) =================
+const cardsContainer=document.getElementById("cardsContainer");
+
+const totalVentas=ventas.reduce((a,b)=>a+b,0);
+const totalCompras=compras.reduce((a,b)=>a+b,0);
+const totalResultado=resultadoMensual.reduce((a,b)=>a+b,0);
+const promedio=totalVentas/ventas.length;
+
+cardsContainer.innerHTML=`
+<div class="card card-resumen">
+<h5>VENTAS TOTALES</h5>
+<h3>$${totalVentas.toLocaleString()}</h3>
+</div>
+
+<div class="card card-resumen">
+<h5>COMPRAS TOTALES</h5>
+<h3>$${totalCompras.toLocaleString()}</h3>
+</div>
+
+<div class="card card-resumen">
+<h5>RESULTADO</h5>
+<h3>$${totalResultado.toLocaleString()}</h3>
+</div>
+
+<div class="card card-resumen">
+<h5>PROMEDIO MENSUAL</h5>
+<h3>$${Math.round(promedio).toLocaleString()}</h3>
+</div>
+`;
+
+// ================= GRÁFICOS =================
+new Chart(document.getElementById('chartComparativo'),{
     type:'bar',
     data:{
-        labels:['2023','2024','2025'],
-        datasets:[{
-            data:[1129024,1338026,1307690],
-            backgroundColor:['#2E3F6E','#5BFF7A','#FF6B35']
-        }]
+        labels:meses,
+        datasets:[
+            {label:'Ventas',data:ventas,backgroundColor:'#2E3F6E'},
+            {label:'Compras',data:compras,backgroundColor:'#5BFF7A'}
+        ]
     }
 });
 
-// DONA
-new Chart(document.getElementById('chartDonut'),{
-    type:'doughnut',
+new Chart(document.getElementById('chartVariacion'),{
+    type:'line',
     data:{
-        labels:['Machachi','Posorja','Aloag','Otros'],
-        datasets:[{
-            data:[70,20,5,5],
-            backgroundColor:['#2E3F6E','#5BFF7A','#FF6B35','#94A3B8']
-        }]
+        labels:meses,
+        datasets:[
+            {label:'Ventas',data:varVentasArr,borderColor:'#2E3F6E'},
+            {label:'Compras',data:varComprasArr,borderColor:'#5BFF7A'},
+            {label:'Resultado',data:varResultadoArr,borderColor:'#FF6B35'}
+        ]
     }
 });
 
