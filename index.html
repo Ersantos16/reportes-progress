@@ -21,8 +21,18 @@
 body{
     margin:0;
     font-family:'Inter',sans-serif;
-    background:linear-gradient(135deg,#0F172A,#1E293B);
+    background:var(--bg);
     color:var(--text);
+}
+
+/* HERO GRID */
+.hero{
+    background:
+        linear-gradient(rgba(15,23,42,0.9), rgba(15,23,42,0.95)),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+    padding:40px;
 }
 
 /* HEADER */
@@ -30,7 +40,6 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px 40px;
 }
 
 .header-left{
@@ -65,19 +74,32 @@ header{
     padding:40px 20px;
 }
 
-.card{
-    background:rgba(255,255,255,0.05);
-    padding:25px;
-    border-radius:12px;
-    margin-bottom:20px;
-}
-
-/* KPI */
+/* KPI STICKY */
 .kpis{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:15px;
     margin-bottom:40px;
+
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(15,23,42,0.95);
+    backdrop-filter: blur(10px);
+    padding:10px;
+    border-radius:10px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.3);
+}
+
+.card{
+    background:rgba(255,255,255,0.05);
+    padding:20px;
+    border-radius:12px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
 }
 
 /* TABLA */
@@ -117,6 +139,9 @@ footer{
 
 <body>
 
+<!-- HERO -->
+<div class="hero">
+
 <header>
 
 <div class="header-left">
@@ -145,6 +170,9 @@ footer{
 
 </header>
 
+</div>
+
+<!-- CONTENT -->
 <div class="container">
 
 <!-- KPI -->
@@ -176,13 +204,12 @@ footer{
 
 </div>
 
-<!-- GRAFICO BARRAS -->
+<!-- GRAFICOS -->
 <div class="card">
 <h2>Ventas vs Compras</h2>
 <canvas id="chartComparativo"></canvas>
 </div>
 
-<!-- GRAFICO LINEA -->
 <div class="card">
 <h2>Variación (%)</h2>
 <canvas id="chartVariacion"></canvas>
@@ -190,9 +217,18 @@ footer{
 
 </div>
 
+<!-- FOOTER -->
 <footer>
+
+<div style="display:flex;justify-content:center;align-items:center;gap:20px;margin-bottom:10px;">
+    <img src="Progress.png" height="30">
+    <img src="veterino.png" height="30">
+</div>
+
 © 2026 PROGRESS SERVICES PROGSERV S.A.S. Todos los derechos reservados.<br>
-Este reporte ha sido elaborado por PROGRESS SERVICES PROGSERV S.A.S. Su reproducción total o parcial está estrictamente prohibida.
+Este reporte ha sido elaborado por PROGRESS SERVICES PROGSERV S.A.S.
+Su reproducción total o parcial está estrictamente prohibida.
+
 </footer>
 
 <script>
@@ -218,27 +254,23 @@ const varVentas=calcVar(ventas);
 const varCompras=calcVar(compras);
 const varResultado=calcVar(resultadoMensual);
 
-// KPIs
+// KPI
 document.getElementById("ventasTotal").innerText="$"+ventas.reduce((a,b)=>a+b,0).toLocaleString();
 document.getElementById("comprasTotal").innerText="$"+compras.reduce((a,b)=>a+b,0).toLocaleString();
 document.getElementById("resultado").innerText="$"+resultadoMensual.reduce((a,b)=>a+b,0).toLocaleString();
 document.getElementById("promedio").innerText="$"+Math.round(ventas.reduce((a,b)=>a+b,0)/12).toLocaleString();
 
-// VAR HEADER
+// HEADER VAR
 function color(v){return v>=0?"#5BFF7A":"#ff6b6b";}
 
-let vV=varVentas[11];
-let vC=varCompras[11];
-let vR=varResultado[11];
+document.getElementById("varVentas").innerText=varVentas[11].toFixed(0)+"%";
+document.getElementById("varVentas").style.color=color(varVentas[11]);
 
-document.getElementById("varVentas").innerText=vV.toFixed(0)+"%";
-document.getElementById("varVentas").style.color=color(vV);
+document.getElementById("varCompras").innerText=varCompras[11].toFixed(0)+"%";
+document.getElementById("varCompras").style.color=color(varCompras[11]);
 
-document.getElementById("varCompras").innerText=vC.toFixed(0)+"%";
-document.getElementById("varCompras").style.color=color(vC);
-
-document.getElementById("varResultado").innerText=vR.toFixed(0)+"%";
-document.getElementById("varResultado").style.color=color(vR);
+document.getElementById("varResultado").innerText=varResultado[11].toFixed(0)+"%";
+document.getElementById("varResultado").style.color=color(varResultado[11]);
 
 // TABLA
 const tabla=document.getElementById("tabla");
@@ -280,7 +312,7 @@ new Chart(document.getElementById('chartVariacion'),{
         datasets:[
             {label:'Ventas',data:varVentas,borderColor:'#2E3F6E'},
             {label:'Compras',data:varCompras,borderColor:'#5BFF7A'},
-            {label:'Resultado',data:varResultado,borderColor:'#ffffff'}
+            {label:'Resultado',data:varResultado,borderColor:'#FFFFFF'}
         ]
     }
 });
