@@ -10,71 +10,51 @@
 
 <style>
 :root {
-    --primary: #2E3F6E;
-    --accent: #5BFF7A;
-    --dark: #0F172A;
-    --card: #1E293B;
-    --text: #E2E8F0;
-    --white: #FFFFFF;
+    --primary:#2E3F6E;
+    --accent:#5BFF7A;
+    --bg:#0F172A;
+    --card:#1E293B;
+    --text:#E2E8F0;
 }
 
-body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #0F172A, #1E293B);
-    color: var(--text);
+body{
     margin:0;
+    font-family:'Inter',sans-serif;
+    background:linear-gradient(135deg,#0F172A,#1E293B);
+    color:var(--text);
 }
 
-/* HEADER */
-header {
-    background: rgba(255,255,255,0.05);
-    padding: 20px 40px;
+header{
     display:flex;
     justify-content:space-between;
-    align-items:center;
-    backdrop-filter: blur(10px);
+    padding:20px 40px;
+    background:rgba(255,255,255,0.03);
 }
 
-header h1 {
-    color:white;
-}
-
-/* CONTAINER */
-.container {
+.container{
     max-width:1100px;
     margin:auto;
     padding:40px 20px;
 }
 
-/* CARDS */
-.card {
-    background: rgba(255,255,255,0.05);
-    border-radius:14px;
-    padding:30px;
+.card{
+    background:rgba(255,255,255,0.05);
+    padding:25px;
+    border-radius:12px;
     margin-bottom:20px;
-    backdrop-filter: blur(10px);
 }
 
-h2 {
-    color:white;
-}
+h2{color:white;}
 
-.highlight {
-    color: var(--accent);
-    font-weight:600;
-}
-
-/* KPI */
 .kpis{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap:15px;
-    margin-bottom:20px;
 }
 
 .kpi{
-    background: rgba(255,255,255,0.05);
-    padding:20px;
+    background:rgba(255,255,255,0.05);
+    padding:15px;
     border-radius:10px;
 }
 
@@ -84,22 +64,19 @@ h2 {
 }
 
 .kpi p{
-    font-size:24px;
+    font-size:22px;
     font-weight:bold;
-    color:white;
 }
 
-/* FOOTER */
-footer {
-    background: var(--primary);
-    color:white;
+.formula{
+    font-size:12px;
+    color:#94A3B8;
+}
+
+footer{
     text-align:center;
     padding:20px;
-}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-    .kpis{grid-template-columns:1fr;}
+    background:var(--primary);
 }
 </style>
 </head>
@@ -107,75 +84,120 @@ footer {
 <body>
 
 <header>
-    <div style="display:flex;align-items:center;gap:10px;">
-        <img src="Progress.png" style="height:45px;">
-        <h1>Reporte Financiero</h1>
-    </div>
-    <img src="veterino.png" style="height:45px;">
+    <img src="Progress.png" height="40">
+    <img src="veterino.png" height="40">
 </header>
 
 <div class="container">
 
 <!-- RESUMEN -->
 <div class="card">
-    <h2>Resumen Ejecutivo</h2>
-    <p>
-        Se evidencia una alta volatilidad en el comportamiento de las ventas mensuales,
-        con picos significativos en el segundo semestre. Esto sugiere una operación dependiente
-        de eventos puntuales o estacionalidad marcada.
-    </p>
+<h2>Resumen Ejecutivo</h2>
+<p>
+Las ventas presentan alta volatilidad mensual. Se identifican picos significativos en el segundo semestre,
+especialmente en julio, octubre y diciembre, evidenciando comportamiento estacional.
+</p>
 </div>
 
 <!-- KPI -->
 <div class="kpis">
-    <div class="kpi">
-        <h4>Total Ventas</h4>
-        <p>$3,774,740</p>
-    </div>
-    <div class="kpi">
-        <h4>Mes Máximo</h4>
-        <p class="highlight">Diciembre</p>
-    </div>
-    <div class="kpi">
-        <h4>Mayor Crecimiento</h4>
-        <p class="highlight">+1243%</p>
-    </div>
+<div class="kpi">
+<h4>Total</h4>
+<p id="total"></p>
+<div class="formula">=SUM(Ventas)</div>
 </div>
 
-<!-- GRÁFICO VENTAS -->
-<div class="card">
-    <h2>Ventas Mensuales</h2>
-    <canvas id="ventasChart"></canvas>
+<div class="kpi">
+<h4>Promedio</h4>
+<p id="promedio"></p>
+<div class="formula">=AVERAGE(Ventas)</div>
 </div>
 
-<!-- VARIACIÓN -->
-<div class="card">
-    <h2>Variación Mensual (%)</h2>
-    <canvas id="varChart"></canvas>
+<div class="kpi">
+<h4>Máximo</h4>
+<p id="max"></p>
+<div class="formula">=MAX(Ventas)</div>
 </div>
 
-<!-- ANÁLISIS -->
+<div class="kpi">
+<h4>Mínimo</h4>
+<p id="min"></p>
+<div class="formula">=MIN(Ventas)</div>
+</div>
+</div>
+
+<!-- TABLA -->
 <div class="card">
-    <h2>Análisis Financiero</h2>
-    <p>
-        La estructura de ingresos presenta alta variabilidad, con caídas abruptas seguidas de crecimientos acelerados.
-        Esto refleja una posible dependencia de contratos puntuales. Se recomienda estabilizar la base de ingresos y
-        diversificar fuentes comerciales para reducir el riesgo financiero.
-    </p>
+<h2>Detalle Mensual</h2>
+<table style="width:100%; border-collapse:collapse;">
+<thead>
+<tr>
+<th>Mes</th>
+<th>Ventas</th>
+<th>Variación %</th>
+</tr>
+</thead>
+<tbody id="tabla"></tbody>
+</table>
+
+<div class="formula">
+Variación = (Mes actual - Mes anterior) / Mes anterior × 100
+</div>
+</div>
+
+<!-- GRÁFICOS -->
+<div class="card">
+<h2>Ventas Mensuales</h2>
+<canvas id="ventasChart"></canvas>
+</div>
+
+<div class="card">
+<h2>Variación Mensual (%)</h2>
+<canvas id="varChart"></canvas>
 </div>
 
 </div>
 
 <footer>
-© 2026 PROGRESS SERVICES PROGSERV S.A.S. Todos los derechos reservados.
+© 2026 PROGRESS SERVICES PROGSERV S.A.S.
 </footer>
 
 <script>
 
-// DATA REAL
-const meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-const ventas = [99815,51731,110979,293804,66415,28404,381626,649979,365924,619432,303714,656114];
-const variacion = [0,-48,114,164,-77,-57,1243,70,-43,69,-50,116];
+// DATA (desde tu Excel real)
+const meses=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const ventas=[99815.65,51731.87,110979.18,293804.39,66415.82,28404.74,381626.38,649979.23,365924.57,619432.17,303714.28,656114.17];
+
+// CALCULOS
+let variacion=[0];
+for(let i=1;i<ventas.length;i++){
+    variacion.push(((ventas[i]-ventas[i-1])/ventas[i-1]*100));
+}
+
+const total=ventas.reduce((a,b)=>a+b,0);
+const promedio=total/ventas.length;
+const max=Math.max(...ventas);
+const min=Math.min(...ventas);
+
+// MOSTRAR KPI
+document.getElementById("total").innerText="$"+Math.round(total).toLocaleString();
+document.getElementById("promedio").innerText="$"+Math.round(promedio).toLocaleString();
+document.getElementById("max").innerText="$"+Math.round(max).toLocaleString();
+document.getElementById("min").innerText="$"+Math.round(min).toLocaleString();
+
+// TABLA
+const tabla=document.getElementById("tabla");
+
+for(let i=0;i<meses.length;i++){
+    tabla.innerHTML+=`
+    <tr>
+        <td>${meses[i]}</td>
+        <td>$${Math.round(ventas[i]).toLocaleString()}</td>
+        <td style="color:${variacion[i]>=0?'#5BFF7A':'#ff6b6b'}">
+            ${i==0 ? '-' : variacion[i].toFixed(0)+'%'}
+        </td>
+    </tr>`;
+}
 
 // CHART VENTAS
 new Chart(document.getElementById('ventasChart'),{
@@ -185,8 +207,7 @@ new Chart(document.getElementById('ventasChart'),{
         datasets:[{
             label:'Ventas',
             data:ventas,
-            backgroundColor:'#2E3F6E',
-            borderRadius:6
+            backgroundColor:'#2E3F6E'
         }]
     },
     options:{
@@ -208,8 +229,7 @@ new Chart(document.getElementById('varChart'),{
             data:variacion,
             borderColor:'#5BFF7A',
             backgroundColor:'rgba(91,255,122,0.2)',
-            fill:true,
-            tension:0.3
+            fill:true
         }]
     },
     options:{
